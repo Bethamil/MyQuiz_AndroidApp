@@ -60,7 +60,7 @@ fun Menu() {
         Spacer(modifier = Modifier.height(80.dp))
 
         Button(
-            onClick = {mContext.startActivity(Intent(mContext, GameActivity::class.java))},
+            onClick = { mContext.startActivity(Intent(mContext, GameActivity::class.java)) },
             modifier = Modifier
                 .width(300.dp)
                 .height(80.dp)
