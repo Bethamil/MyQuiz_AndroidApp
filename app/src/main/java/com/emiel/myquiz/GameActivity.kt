@@ -1,5 +1,6 @@
 package com.emiel.myquiz
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
@@ -15,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,7 +26,7 @@ import org.jsoup.Jsoup
 
 
 class GameActivity : ComponentActivity() {
-    lateinit var game : Game
+    lateinit var game: Game
 
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -41,110 +42,119 @@ class GameActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Scaffold(topBar = {
-                        SmallTopAppBar(
-                            title = { Text(text = "Quiz") },
-                            colors = TopAppBarDefaults.smallTopAppBarColors(
-                                MaterialTheme.colorScheme.surfaceVariant,
-                                titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        )
-                    }) {
                         QuizGame()
-
-                    }
                 }
             }
         }
     }
 
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Preview
     @Composable
     fun QuizGame() {
-        val test = remember {
-            mutableStateOf(0)
-        }
-        val spacingSize = 15.dp
-        val buttonHeight = 50.dp
-        Column(
-            modifier = Modifier.padding(10.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Row() {
-                Text(text = "Score: ")
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(Color.Cyan)
-                        .padding(10.dp)
-                ) {
-                    Text(text = test.value.toString(), fontSize = 30.sp)
+            val qNumber = remember {
+                mutableStateOf(1)
+            }
+            val mContext = LocalContext.current
+
+            fun buttonFunction(answerNumber: Int) {
+                if (qNumber.value < 10) {
+                    qNumber.value++; game.nextQuestion(game.allAnswers[answerNumber]);
+                } else {
+                    val value = game.score
+                    val i = Intent(mContext, GameResultActivity::class.java)
+                    i.putExtra("key", value)
+                    startActivity(i)
                 }
             }
-            Spacer(modifier = Modifier.height(spacingSize))
 
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(1f)
-                    .height(300.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Color.Cyan)
-                    .padding(10.dp)
-            ) {
-                Text(
-                    text = Jsoup.parse(game.currentQuestion?.question ?: String()).text(),
-                    fontSize = 30.sp
+            val spacingSize = 15.dp
+            val buttonHeight = 90.dp
+
+        Scaffold(topBar = {
+            SmallTopAppBar(
+                title = { Text(text = "Score: " + game.score) },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    MaterialTheme.colorScheme.surfaceVariant,
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-            }
-            Spacer(modifier = Modifier.height(30.dp))
-            Button(
-                onClick = { test.value++; game.nextQuestion(game.allAnswers[0]) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(buttonHeight)
-
+            )
+//            HACK UPDATE
+            qNumber.value
+        }) {
+            Column(
+                modifier = Modifier.padding(10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(text = game.allAnswers[0], fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(spacingSize))
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(1f)
+                        .height(300.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colorScheme.tertiary)
+                        .padding(10.dp)
+                ) {
+                    Text(
+                        text = qNumber.value.toString() + ". " + Jsoup.parse(
+                            game.currentQuestion?.question ?: String()
+                        ).text(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 30.sp,
+                        lineHeight = 40.sp,
+                        color = MaterialTheme.colorScheme.background
+                    )
+                }
+                Spacer(modifier = Modifier.height(30.dp))
+                Button(
+                    onClick = { buttonFunction(0) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(buttonHeight)
+
+                ) {
+                    Text(text = game.allAnswers[0], fontSize = 20.sp)
+                }
+                Spacer(modifier = Modifier.height(spacingSize))
+                Button(
+                    onClick = { buttonFunction(1) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(buttonHeight)
+
+                ) {
+                    Text(text = game.allAnswers[1], fontSize = 20.sp)
+                }
+                Spacer(modifier = Modifier.height(spacingSize))
+
+
+                Button(
+                    onClick = { buttonFunction(2) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(buttonHeight)
+
+                ) {
+                    Text(text = game.allAnswers[2], fontSize = 20.sp)
+                }
+                Spacer(modifier = Modifier.height(spacingSize))
+
+
+                Button(
+                    onClick = { buttonFunction(3) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(buttonHeight)
+
+                ) {
+                    Text(text = game.allAnswers[3], fontSize = 20.sp)
+                }
             }
-            Spacer(modifier = Modifier.height(spacingSize))
-            Button(
-                onClick = {test.value++; game.nextQuestion(game.allAnswers[1]) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(buttonHeight)
-
-            ) {
-                Text(text = game.allAnswers[1], fontSize = 20.sp)
-            }
-            Spacer(modifier = Modifier.height(spacingSize))
-
-
-            Button(
-                onClick = {test.value++; game.nextQuestion(game.allAnswers[2])},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(buttonHeight)
-
-            ) {
-                Text(text = game.allAnswers[2], fontSize = 20.sp)
-            }
-            Spacer(modifier = Modifier.height(spacingSize))
-
-
-            Button(
-                onClick = {test.value++; game.nextQuestion(game.allAnswers[3]) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(buttonHeight)
-
-            ) {
-                Text(text = game.allAnswers[3], fontSize = 20.sp)
-            }
-
         }
     }
+
 }

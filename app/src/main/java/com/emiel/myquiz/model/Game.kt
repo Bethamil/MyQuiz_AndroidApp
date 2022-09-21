@@ -36,7 +36,7 @@ class Game(
     var currentQuestionNumber = 0
     var score = 0
     var currentQuestion: Questions? = null
-    var allAnswers : MutableList<String> = mutableListOf()
+    var allAnswers: MutableList<String> = mutableListOf()
 
     init {
         fillQuiz()
@@ -56,6 +56,7 @@ class Game(
         checkAnswer(yourAnswer)
         currentQuestion = quiz.results[++currentQuestionNumber]
         fillAllAnswersList()
+
 
     }
 
