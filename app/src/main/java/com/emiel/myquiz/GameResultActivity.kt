@@ -62,8 +62,8 @@ class GameResultActivity : ComponentActivity() {
             )
         }) {
             Column(
-                modifier = Modifier.padding(10.dp),
-                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(10.dp).fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
@@ -71,7 +71,6 @@ class GameResultActivity : ComponentActivity() {
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(1f)
-                        .height(300.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .background(MaterialTheme.colorScheme.secondary)
                         .padding(10.dp)
@@ -79,11 +78,10 @@ class GameResultActivity : ComponentActivity() {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
                         text = scoreGame.toString(),
-                        fontSize = 200.sp
+                        fontSize = 110.sp
                     )
                 }
-                Spacer(modifier = Modifier.height(350.dp))
-
+                Spacer(modifier = Modifier.height(300.dp))
                 Button(
                     onClick = {
                         mContext.startActivity(
@@ -95,8 +93,7 @@ class GameResultActivity : ComponentActivity() {
                     },
                     modifier = Modifier
                         .width(300.dp)
-                        .height(80.dp)
-                        .weight(10f)
+                        .weight(1f, true)
 
 
                 ) {

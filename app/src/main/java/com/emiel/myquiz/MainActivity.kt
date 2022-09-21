@@ -51,12 +51,11 @@ class MainActivity : ComponentActivity() {
 fun Menu() {
     val mContext = LocalContext.current
     Column(
-        modifier = Modifier.padding(6.dp),
-        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.padding(6.dp).fillMaxSize().fillMaxHeight(),
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(80.dp))
-        Image(painter = painterResource(id = R.drawable.quiz_logo), contentDescription = null)
+        Image(painter = painterResource(id = R.drawable.quiz_logo), contentDescription = null, modifier = Modifier.height(250.dp))
         Spacer(modifier = Modifier.height(80.dp))
 
         Button(

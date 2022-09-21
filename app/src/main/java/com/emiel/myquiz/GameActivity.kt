@@ -62,6 +62,7 @@ class GameActivity : ComponentActivity() {
                 if (qNumber.value < 10) {
                     qNumber.value++; game.nextQuestion(game.allAnswers[answerNumber]);
                 } else {
+                    game.checkAnswer(game.allAnswers[answerNumber])
                     val value = game.score
                     val i = Intent(mContext, GameResultActivity::class.java)
                     i.putExtra("key", value)
@@ -70,7 +71,7 @@ class GameActivity : ComponentActivity() {
             }
 
             val spacingSize = 15.dp
-            val buttonHeight = 90.dp
+            val buttonHeight = 70.dp
 
         Scaffold(topBar = {
             SmallTopAppBar(
@@ -84,7 +85,7 @@ class GameActivity : ComponentActivity() {
             qNumber.value
         }) {
             Column(
-                modifier = Modifier.padding(10.dp),
+                modifier = Modifier.padding(10.dp).fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -94,7 +95,6 @@ class GameActivity : ComponentActivity() {
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(1f)
-                        .height(300.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .background(MaterialTheme.colorScheme.tertiary)
                         .padding(10.dp)
