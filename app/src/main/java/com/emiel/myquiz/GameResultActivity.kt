@@ -1,6 +1,7 @@
 package com.emiel.myquiz
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.nfc.cardemulation.CardEmulation
@@ -26,14 +27,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.room.Room
+import com.emiel.myquiz.RoomDAO.AppDatabase
 import com.emiel.myquiz.RoomDAO.PlayerDAO
+import com.emiel.myquiz.model.Player
 import com.emiel.myquiz.ui.theme.MyQuizTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class GameResultActivity : ComponentActivity() {
     var scoreGame = 0
 
+//    fun createDB(applicationContext: Context): AppDatabase {
+//        return Room.databaseBuilder(
+//            applicationContext,
+//            AppDatabase::class.java, "scores"
+//        ).fallbackToDestructiveMigration().build()
+//    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        fun createDB(applicationContext: Context): AppDatabase {
+            return Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java, "scores"
+            ).fallbackToDestructiveMigration().build()
+        }
+
+        val db   = createDB(applicationContext = applicationContext)
+
+
+
         setContent {
 //            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             val extras = intent.extras
@@ -46,7 +74,7 @@ class GameResultActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GameResults()
+                    GameResults(db)
 
                 }
             }
@@ -55,10 +83,9 @@ class GameResultActivity : ComponentActivity() {
     }
 
 
-    @Preview
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun GameResults() {
+    fun GameResults(db : AppDatabase) {
         val mContext = LocalContext.current
         Scaffold(topBar = {
             TopAppBar(
@@ -79,8 +106,8 @@ class GameResultActivity : ComponentActivity() {
 
                 Card(
                     modifier = Modifier
-                        .padding(10.dp).fillMaxWidth()
-                        ,
+                        .padding(10.dp)
+                        .fillMaxWidth(),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                     shape = MaterialTheme.shapes.large
                 ) {
@@ -95,17 +122,26 @@ class GameResultActivity : ComponentActivity() {
 
                     TextField(
                         modifier = Modifier
-                            .padding(10.dp).size(width = 300.dp, height = 80.dp)
-                        ,
+                            .padding(10.dp)
+                            .size(width = 300.dp, height = 80.dp),
                         value = textName,
                         onValueChange = { textName = it },
-                        label = { Text("Name", ) },
+                        label = { Text("Name") },
                         textStyle = TextStyle(fontSize = 30.sp)
                     )
 
-                    Button(onClick = { /*TODO*/ },
-                        modifier = Modifier.padding(10.dp).size(width = 150.dp, height = 60.dp)) {
-                        Text(text = "Save", )
+                    Button(
+                        onClick = {
+                            GlobalScope.launch(Dispatchers.IO) {
+                                db.playerDAO().insert(Player(name=textName, score=scoreGame))
+                                println( db.playerDAO().getAll())
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(width = 150.dp, height = 60.dp)
+                    ) {
+                        Text(text = "Save")
                     }
                 }
             }
@@ -116,17 +152,19 @@ class GameResultActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Button(onClick = {
-                    mContext.startActivity(
-                        Intent(
-                            mContext,
-                            MainActivity::class.java
+                Button(
+                    onClick = {
+                        mContext.startActivity(
+                            Intent(
+                                mContext,
+                                MainActivity::class.java
+                            )
                         )
-                    )
-                },
+                    },
                     modifier = Modifier
                         .width(300.dp)
-                        .height(80.dp)) {
+                        .height(80.dp)
+                ) {
                     Text(text = "Menu")
                 }
 

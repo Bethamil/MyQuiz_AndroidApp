@@ -1,10 +1,7 @@
 package com.emiel.myquiz
 
 import android.annotation.SuppressLint
-import android.app.Application
-import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,38 +16,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.room.Room
-import com.emiel.myquiz.RoomDAO.AppDatabase
-import com.emiel.myquiz.model.Player
 import com.emiel.myquiz.ui.theme.MyQuizTheme
 
 class MainActivity : ComponentActivity() {
-
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        fun createDB(applicationContext : Context) : AppDatabase {
-            return Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java, "scores"
-            ).build()
-        }
-
-        val db = createDB(applicationContext = applicationContext)
-        db.playerDAO().insert(Player(1, "Emiel"))
-        db.playerDAO().insert(Player(2, "Jan"))
-        println(db.playerDAO().getAll())
-
-
-
-
-
-
-
-
 
         setContent {
             MyQuizTheme {

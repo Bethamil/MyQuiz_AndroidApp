@@ -90,7 +90,7 @@ class GameActivity : ComponentActivity() {
         }) { values ->
             Column(
                 modifier = Modifier
-                    .padding(values)
+                    .padding(values).padding(10.dp)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -101,7 +101,7 @@ class GameActivity : ComponentActivity() {
                 Box(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(1f)
+                        .fillMaxWidth()
                         .clip(RoundedCornerShape(10.dp))
                         .defaultMinSize(minHeight = 100.dp)
                         .background(MaterialTheme.colorScheme.tertiary)

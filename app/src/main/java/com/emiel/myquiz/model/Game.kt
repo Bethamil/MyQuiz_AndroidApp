@@ -1,8 +1,5 @@
 package com.emiel.myquiz.model
 
-import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import com.google.gson.Gson
 import org.jsoup.Jsoup
 

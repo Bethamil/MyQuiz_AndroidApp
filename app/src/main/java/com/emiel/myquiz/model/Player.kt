@@ -7,8 +7,11 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Player(
-    @PrimaryKey val uid: Int,
-    @ColumnInfo(name = "name") val firstName: String?,
+    @PrimaryKey(autoGenerate = true) var id : Int?  = null,
+    @ColumnInfo(name = "name") val name: String?,
+    @ColumnInfo(name = "score") val score: Int?,
+
 
 ) {
+
 }
