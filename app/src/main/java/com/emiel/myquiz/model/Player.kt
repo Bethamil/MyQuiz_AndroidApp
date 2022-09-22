@@ -6,12 +6,15 @@ import androidx.room.PrimaryKey
 
 
 @Entity
-data class Player(
+data class Player (
     @PrimaryKey(autoGenerate = true) var id : Int?  = null,
     @ColumnInfo(name = "name") val name: String?,
-    @ColumnInfo(name = "score") val score: Int?,
+    @ColumnInfo(name = "score") val score: Int,
 
 
-) {
+) : Comparable<Player> {
+    override fun compareTo(other: Player): Int {
+        return other.score.compareTo(score)
+    }
 
 }

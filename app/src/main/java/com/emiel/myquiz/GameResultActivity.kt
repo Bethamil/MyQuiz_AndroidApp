@@ -1,19 +1,13 @@
 package com.emiel.myquiz
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
-import android.nfc.cardemulation.CardEmulation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,15 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.room.Room
 import com.emiel.myquiz.RoomDAO.AppDatabase
-import com.emiel.myquiz.RoomDAO.PlayerDAO
 import com.emiel.myquiz.model.Player
 import com.emiel.myquiz.ui.theme.MyQuizTheme
 import kotlinx.coroutines.Dispatchers
@@ -38,15 +28,6 @@ import kotlinx.coroutines.launch
 
 class GameResultActivity : ComponentActivity() {
     var scoreGame = 0
-
-//    fun createDB(applicationContext: Context): AppDatabase {
-//        return Room.databaseBuilder(
-//            applicationContext,
-//            AppDatabase::class.java, "scores"
-//        ).fallbackToDestructiveMigration().build()
-//    }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,50 +79,69 @@ class GameResultActivity : ComponentActivity() {
         }) { values ->
             Column(
                 modifier = Modifier
-                    .padding(values)
+                    .padding(values).padding(10.dp)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
-                Card(
+                Box(
                     modifier = Modifier
-                        .padding(10.dp)
-                        .fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                    shape = MaterialTheme.shapes.large
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .defaultMinSize(minHeight = 100.dp)
+                        .background(MaterialTheme.colorScheme.tertiary)
+                        .padding(10.dp),
+                    contentAlignment = Alignment.Center
+
+
+//                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+//                    shape = MaterialTheme.shapes.large
                 ) {
-                    Text(
-                        text = scoreGame.toString(),
-                        fontSize = 110.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    var textName by remember { mutableStateOf("") }
+                    Column(modifier = Modifier
+                        .padding(5.dp)
+                        ,
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally,) {
+                        Text(
+                            text = scoreGame.toString(),
+                            fontSize = 110.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                        var textName by remember { mutableStateOf("") }
 
-                    TextField(
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .size(width = 300.dp, height = 80.dp),
-                        value = textName,
-                        onValueChange = { textName = it },
-                        label = { Text("Name") },
-                        textStyle = TextStyle(fontSize = 30.sp)
-                    )
+                        TextField(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(width = 300.dp, height = 80.dp),
+                            value = textName,
+                            onValueChange = { textName = it },
+                            label = { Text("Name") },
+                            textStyle = TextStyle(fontSize = 30.sp)
+                        )
 
-                    Button(
-                        onClick = {
-                            GlobalScope.launch(Dispatchers.IO) {
-                                db.playerDAO().insert(Player(name=textName, score=scoreGame))
-                                println( db.playerDAO().getAll())
-                            }
-                        },
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .size(width = 150.dp, height = 60.dp)
-                    ) {
-                        Text(text = "Save")
+                        Button(
+                            onClick = {
+                                GlobalScope.launch(Dispatchers.IO) {
+                                    db.playerDAO()
+                                        .insert(Player(name = textName, score = scoreGame))
+                                    mContext.startActivity(
+                                        Intent(
+                                            mContext,
+                                            MainActivity::class.java
+                                        )
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(width = 150.dp, height = 60.dp)
+                        ) {
+                            Text(text = "Save")
+                        }
                     }
                 }
             }
@@ -167,23 +167,6 @@ class GameResultActivity : ComponentActivity() {
                 ) {
                     Text(text = "Menu")
                 }
-
-
-//                Box(
-//                    modifier = Modifier
-//                        .align(Alignment.CenterHorizontally)
-//                        .fillMaxWidth(1f)
-//                        .clip(RoundedCornerShape(10.dp))
-//                        .background(MaterialTheme.colorScheme.tertiary)
-//                        .padding(10.dp)
-//                ) {
-//                    Text(
-//                        modifier = Modifier.align(Alignment.Center),
-//                        text = scoreGame.toString(),
-//                        fontSize = 110.sp,
-//                        color = MaterialTheme.colorScheme.background
-//                    )
-//                }
             }
         }
     }
