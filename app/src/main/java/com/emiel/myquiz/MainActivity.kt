@@ -1,6 +1,7 @@
 package com.emiel.myquiz
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyQuizTheme {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -51,11 +53,18 @@ class MainActivity : ComponentActivity() {
 fun Menu() {
     val mContext = LocalContext.current
     Column(
-        modifier = Modifier.padding(6.dp).fillMaxSize().fillMaxHeight(),
+        modifier = Modifier
+            .padding(6.dp)
+            .fillMaxSize()
+            .fillMaxHeight(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Image(painter = painterResource(id = R.drawable.quiz_logo), contentDescription = null, modifier = Modifier.height(250.dp))
+        Image(
+            painter = painterResource(id = R.drawable.quiz_logo),
+            contentDescription = null,
+            modifier = Modifier.height(250.dp)
+        )
         Spacer(modifier = Modifier.height(80.dp))
 
         Button(
@@ -78,4 +87,5 @@ fun Menu() {
             Text(text = "High Scores", fontSize = 30.sp)
         }
     }
+
 }

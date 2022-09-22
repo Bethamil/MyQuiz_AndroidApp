@@ -1,6 +1,7 @@
 package com.emiel.myquiz
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
@@ -28,8 +29,6 @@ import org.jsoup.Jsoup
 class GameActivity : ComponentActivity() {
     lateinit var game: Game
 
-
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -37,12 +36,14 @@ class GameActivity : ComponentActivity() {
             StrictMode.setThreadPolicy(gfgPolicy)
             game = Game()
             MyQuizTheme {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                        QuizGame()
+                    QuizGame()
                 }
             }
         }
@@ -53,25 +54,25 @@ class GameActivity : ComponentActivity() {
     @Preview
     @Composable
     fun QuizGame() {
-            val qNumber = remember {
-                mutableStateOf(1)
-            }
-            val mContext = LocalContext.current
+        val qNumber = remember {
+            mutableStateOf(1)
+        }
+        val mContext = LocalContext.current
 
-            fun buttonFunction(answerNumber: Int) {
-                if (qNumber.value < 10) {
-                    qNumber.value++; game.nextQuestion(game.allAnswers[answerNumber]);
-                } else {
-                    game.checkAnswer(game.allAnswers[answerNumber])
-                    val value = game.score
-                    val i = Intent(mContext, GameResultActivity::class.java)
-                    i.putExtra("key", value)
-                    startActivity(i)
-                }
+        fun buttonFunction(answerNumber: Int) {
+            if (qNumber.value < 10) {
+                qNumber.value++; game.nextQuestion(game.allAnswers[answerNumber])
+            } else {
+                game.checkAnswer(game.allAnswers[answerNumber])
+                val value = game.score
+                val i = Intent(mContext, GameResultActivity::class.java)
+                i.putExtra("key", value)
+                startActivity(i)
             }
+        }
 
-            val spacingSize = 15.dp
-            val buttonHeight = 70.dp
+        val spacingSize = 15.dp
+        val buttonHeight = 60.dp
 
         Scaffold(topBar = {
             SmallTopAppBar(
@@ -85,8 +86,10 @@ class GameActivity : ComponentActivity() {
             qNumber.value
         }) {
             Column(
-                modifier = Modifier.padding(10.dp).fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(spacingSize))
@@ -96,6 +99,7 @@ class GameActivity : ComponentActivity() {
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(1f)
                         .clip(RoundedCornerShape(10.dp))
+                        .defaultMinSize(minHeight = 100.dp)
                         .background(MaterialTheme.colorScheme.tertiary)
                         .padding(10.dp)
                 ) {
@@ -109,52 +113,64 @@ class GameActivity : ComponentActivity() {
                         color = MaterialTheme.colorScheme.background
                     )
                 }
-                Spacer(modifier = Modifier.height(30.dp))
-                Button(
-                    onClick = { buttonFunction(0) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(buttonHeight)
-
-                ) {
-                    Text(text = game.allAnswers[0], fontSize = 20.sp)
-                }
-                Spacer(modifier = Modifier.height(spacingSize))
-                Button(
-                    onClick = { buttonFunction(1) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(buttonHeight)
-
-                ) {
-                    Text(text = game.allAnswers[1], fontSize = 20.sp)
-                }
-                Spacer(modifier = Modifier.height(spacingSize))
 
 
-                Button(
-                    onClick = { buttonFunction(2) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(buttonHeight)
 
-                ) {
-                    Text(text = game.allAnswers[2], fontSize = 20.sp)
-                }
-                Spacer(modifier = Modifier.height(spacingSize))
+                Column(modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxSize(),
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
 
 
-                Button(
-                    onClick = { buttonFunction(3) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(buttonHeight)
+                    Button(
+                        onClick = { buttonFunction(0) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = buttonHeight)
 
-                ) {
-                    Text(text = game.allAnswers[3], fontSize = 20.sp)
+                    ) {
+                        Text(text = game.allAnswers[0], fontSize = 20.sp)
+                    }
+                    Spacer(modifier = Modifier.height(spacingSize))
+                    Button(
+                        onClick = { buttonFunction(1) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = buttonHeight)
+
+
+                    ) {
+                        Text(text = game.allAnswers[1], fontSize = 20.sp)
+                    }
+                    Spacer(modifier = Modifier.height(spacingSize))
+
+
+                    Button(
+                        onClick = { buttonFunction(2) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = buttonHeight)
+
+
+                    ) {
+                        Text(text = game.allAnswers[2], fontSize = 20.sp)
+                    }
+                    Spacer(modifier = Modifier.height(spacingSize))
+
+
+                    Button(
+                        onClick = { buttonFunction(3) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = buttonHeight)
+
+
+                    ) {
+                        Text(text = game.allAnswers[3], fontSize = 20.sp)
+                    }
                 }
             }
         }
     }
-
 }

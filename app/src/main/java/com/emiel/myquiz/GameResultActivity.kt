@@ -1,17 +1,15 @@
 package com.emiel.myquiz
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,10 +22,10 @@ import com.emiel.myquiz.ui.theme.MyQuizTheme
 class GameResultActivity : ComponentActivity() {
     var scoreGame = 0
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             val extras = intent.extras
             if (extras != null) {
                 scoreGame = extras.getInt("key")
@@ -72,13 +70,14 @@ class GameResultActivity : ComponentActivity() {
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(1f)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colorScheme.secondary)
+                        .background(MaterialTheme.colorScheme.tertiary)
                         .padding(10.dp)
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
                         text = scoreGame.toString(),
-                        fontSize = 110.sp
+                        fontSize = 110.sp,
+                        color = MaterialTheme.colorScheme.background
                     )
                 }
                 Spacer(modifier = Modifier.height(300.dp))
@@ -103,15 +102,6 @@ class GameResultActivity : ComponentActivity() {
 
 
         }
-    }
-
-
-    @Composable
-    fun Modifier.weight(
-        @FloatRange(from = 0.0, to = 3.4e38, fromInclusive = false)
-        weight: Float,
-        fill: Boolean = true
-    ) {
     }
 }
 
