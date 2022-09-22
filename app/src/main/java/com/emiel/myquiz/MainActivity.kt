@@ -1,5 +1,8 @@
 package com.emiel.myquiz
 
+import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -16,22 +19,49 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.room.Room
+import com.emiel.myquiz.RoomDAO.AppDatabase
+import com.emiel.myquiz.model.Player
 import com.emiel.myquiz.ui.theme.MyQuizTheme
 
 class MainActivity : ComponentActivity() {
+
+
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        fun createDB(applicationContext : Context) : AppDatabase {
+            return Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java, "scores"
+            ).build()
+        }
+
+        val db = createDB(applicationContext = applicationContext)
+        db.playerDAO().insert(Player(1, "Emiel"))
+        db.playerDAO().insert(Player(2, "Jan"))
+        println(db.playerDAO().getAll())
+
+
+
+
+
+
+
+
+
         setContent {
             MyQuizTheme {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Scaffold(topBar = {
-                        SmallTopAppBar(
+                        TopAppBar(
                             title = { Text(text = "Menu") },
                             colors = TopAppBarDefaults.smallTopAppBarColors(
                                 MaterialTheme.colorScheme.surfaceVariant,
@@ -48,44 +78,58 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun Menu() {
-    val mContext = LocalContext.current
-    Column(
-        modifier = Modifier
-            .padding(6.dp)
-            .fillMaxSize()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.quiz_logo),
-            contentDescription = null,
-            modifier = Modifier.height(250.dp)
+    Scaffold(topBar = {
+        TopAppBar(
+            title = { Text(text = "Menu") },
+            colors = TopAppBarDefaults.smallTopAppBarColors(
+                MaterialTheme.colorScheme.surfaceVariant,
+                titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         )
-        Spacer(modifier = Modifier.height(80.dp))
+    })
+    { values ->
 
-        Button(
-            onClick = { mContext.startActivity(Intent(mContext, GameActivity::class.java)) },
+        val mContext = LocalContext.current
+        Column(
             modifier = Modifier
-                .width(300.dp)
-                .height(80.dp)
-
+                .padding(values)
+                .fillMaxSize()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "Start game", fontSize = 30.sp)
-        }
-        Spacer(modifier = Modifier.height(30.dp))
-        Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .width(300.dp)
-                .height(80.dp)
+            Image(
+                painter = painterResource(id = R.drawable.quiz_logo),
+                contentDescription = null,
+                modifier = Modifier.height(250.dp)
+            )
+            Spacer(modifier = Modifier.height(80.dp))
 
-        ) {
-            Text(text = "High Scores", fontSize = 30.sp)
+            Button(
+                onClick = { mContext.startActivity(Intent(mContext, GameActivity::class.java)) },
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(80.dp)
+
+            ) {
+                Text(text = "Start game", fontSize = 30.sp)
+            }
+            Spacer(modifier = Modifier.height(30.dp))
+            Button(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(80.dp)
+
+            ) {
+                Text(text = "High Scores", fontSize = 30.sp)
+            }
         }
     }
+
 
 }

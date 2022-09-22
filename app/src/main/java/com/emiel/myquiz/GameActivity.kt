@@ -1,5 +1,6 @@
 package com.emiel.myquiz
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -36,7 +37,7 @@ class GameActivity : ComponentActivity() {
             StrictMode.setThreadPolicy(gfgPolicy)
             game = Game()
             MyQuizTheme {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -48,6 +49,7 @@ class GameActivity : ComponentActivity() {
             }
         }
     }
+
 
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +66,7 @@ class GameActivity : ComponentActivity() {
                 qNumber.value++; game.nextQuestion(game.allAnswers[answerNumber])
             } else {
                 game.checkAnswer(game.allAnswers[answerNumber])
+
                 val value = game.score
                 val i = Intent(mContext, GameResultActivity::class.java)
                 i.putExtra("key", value)
@@ -75,7 +78,7 @@ class GameActivity : ComponentActivity() {
         val buttonHeight = 60.dp
 
         Scaffold(topBar = {
-            SmallTopAppBar(
+            TopAppBar(
                 title = { Text(text = "Score: " + game.score) },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     MaterialTheme.colorScheme.surfaceVariant,
@@ -84,15 +87,16 @@ class GameActivity : ComponentActivity() {
             )
 //            HACK UPDATE
             qNumber.value
-        }) {
+        }) { values ->
             Column(
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(values)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(spacingSize))
+
 
                 Box(
                     modifier = Modifier
