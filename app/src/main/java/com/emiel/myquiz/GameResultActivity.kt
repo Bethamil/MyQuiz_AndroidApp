@@ -91,7 +91,7 @@ class GameResultActivity : ComponentActivity() {
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(10.dp))
                         .defaultMinSize(minHeight = 100.dp)
-                        .background(MaterialTheme.colorScheme.tertiary)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(10.dp),
                     contentAlignment = Alignment.Center
 
@@ -163,7 +163,7 @@ class GameResultActivity : ComponentActivity() {
                     },
                     modifier = Modifier
                         .width(300.dp)
-                        .height(80.dp)
+                        .height(80.dp).padding(10.dp)
                 ) {
                     Text(text = "Menu")
                 }

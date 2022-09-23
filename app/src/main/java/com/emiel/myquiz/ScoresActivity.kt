@@ -53,7 +53,7 @@ class ScoresActivity : ComponentActivity() {
                                         .fillMaxWidth()
                                         .clip(RoundedCornerShape(10.dp))
                                         .defaultMinSize(minHeight = 100.dp)
-                                        .background(MaterialTheme.colorScheme.tertiary)
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
                                         .padding(10.dp)
                                 ) {
                                     Text(
@@ -61,7 +61,7 @@ class ScoresActivity : ComponentActivity() {
                                         style = MaterialTheme.typography.bodyLarge,
                                         fontSize = 30.sp,
                                         lineHeight = 40.sp,
-                                        color = MaterialTheme.colorScheme.background
+//                                        color = MaterialTheme.colorScheme.background
                                     )
                                 }
 
@@ -86,7 +86,7 @@ class ScoresActivity : ComponentActivity() {
                                     },
                                     modifier = Modifier
                                         .width(300.dp)
-                                        .height(80.dp)
+                                        .height(80.dp).padding(10.dp)
                                 ) {
                                     Text(text = "Menu")
                                 }

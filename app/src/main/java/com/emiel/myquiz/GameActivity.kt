@@ -104,7 +104,7 @@ class GameActivity : ComponentActivity() {
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(10.dp))
                         .defaultMinSize(minHeight = 100.dp)
-                        .background(MaterialTheme.colorScheme.tertiary)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(10.dp)
                 ) {
                     Text(
@@ -114,7 +114,7 @@ class GameActivity : ComponentActivity() {
                         style = MaterialTheme.typography.bodyLarge,
                         fontSize = 30.sp,
                         lineHeight = 40.sp,
-                        color = MaterialTheme.colorScheme.background
+//                        color = MaterialTheme.colorScheme.background
                     )
                 }
 
