@@ -79,7 +79,8 @@ class GameResultActivity : ComponentActivity() {
         }) { values ->
             Column(
                 modifier = Modifier
-                    .padding(values).padding(10.dp)
+                    .padding(values)
+                    .padding(10.dp)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -120,20 +121,25 @@ class GameResultActivity : ComponentActivity() {
                             value = textName,
                             onValueChange = { textName = it },
                             label = { Text("Name") },
-                            textStyle = TextStyle(fontSize = 30.sp)
+                            textStyle = TextStyle(fontSize = 30.sp),
+                            singleLine = true,
+                            maxLines = 1,
+
                         )
 
                         Button(
                             onClick = {
                                 GlobalScope.launch(Dispatchers.IO) {
-                                    db.playerDAO()
-                                        .insert(Player(name = textName, score = scoreGame))
-                                    mContext.startActivity(
-                                        Intent(
-                                            mContext,
-                                            MainActivity::class.java
+                                    if (textName.trim() != "") {
+                                        db.playerDAO()
+                                            .insert(Player(name = textName.trim(), score = scoreGame))
+                                        mContext.startActivity(
+                                            Intent(
+                                                mContext,
+                                                MainActivity::class.java
+                                            )
                                         )
-                                    )
+                                    }
                                 }
                             },
                             modifier = Modifier
@@ -163,7 +169,8 @@ class GameResultActivity : ComponentActivity() {
                     },
                     modifier = Modifier
                         .width(300.dp)
-                        .height(80.dp).padding(10.dp)
+                        .height(80.dp)
+                        .padding(10.dp)
                 ) {
                     Text(text = "Menu")
                 }

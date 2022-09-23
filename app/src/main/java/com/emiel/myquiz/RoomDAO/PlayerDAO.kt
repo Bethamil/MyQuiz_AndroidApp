@@ -10,7 +10,7 @@ interface PlayerDAO {
     @Query("SELECT * FROM player")
     suspend fun getAll(): List<Player>
 
-    @Query("SELECT * FROM player LIMIT 10")
+    @Query("SELECT * FROM player ORDER BY score DESC LIMIT 10")
     suspend fun getTopTen(): List<Player>
 
     @Insert

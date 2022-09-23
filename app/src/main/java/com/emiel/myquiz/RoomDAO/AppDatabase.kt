@@ -7,7 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.emiel.myquiz.model.Player
 
-@Database(entities = [Player :: class], version = 4)
+@Database(entities = [Player :: class], version = 5)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun playerDAO() : PlayerDAO
